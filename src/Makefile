@@ -11,18 +11,21 @@ INC=-I.
 ESPRESSO_DIR=/public/home/ccao/source/espresso-5.2.1
 IOTK_DIR=$(ESPRESSO_DIR)/iotk
 
-INC=-I$(IOTK_DIR)/src -I$(ESPRESSO_DIR)/Modules
-#LIB=$(IOTK_DIR)/src/libiotk.a
+INC=-I$(IOTK_DIR)/src # -I$(ESPRESSO_DIR)/Modules
+LIB=$(IOTK_DIR)/src/libiotk.a
 
 #LIB=-L$(MKLROOT)/lib/intel64 -lmkl_lapack95_lp64 -lmkl_intel_lp64 -lmkl_sequential -lmkl_core
 
-z2inv.x : z2inv_pwscf.f90
-	$(F90) -o z2inv.x z2inv_pwscf.f90 $(INC) $(LIB)
+z2inv.x : z2inv.f90 wave_pw.o constants.o
+	$(F90) -o z2inv.x z2inv.f90 wave_pw.o constants.o $(INC) $(LIB)
 
 z2inv_vasp.x : z2inv_vasp.f90 wvfunc.o constants.o
 	$(F90) -fpp $(FOPT) $(INC) -o z2inv_vasp.x z2inv_vasp.f90 wvfunc.o constants.o flib.o $(LIB)
 
+wave_pw.o: wave_pw.f90 constants.o
+
 constants.o: constants.f90
+
 flib.o: flib.f90
 
 wvfunc.o: wvfunc.f90 constants.o flib.o
