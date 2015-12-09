@@ -12,6 +12,7 @@ PROGRAM z2inv
   !
   integer, parameter :: iun=10
   character(len=32) :: arg              ! Command line argument
+  integer nkpt
   integer nb                            ! Electron fill to band
   integer  npw, ipw                     ! npw: number of gvecs for the kpt
   character(iotk_attlenx) :: attr
@@ -21,7 +22,8 @@ PROGRAM z2inv
   real(dp), allocatable :: gvec(:,:)    ! gvec coordinate
   integer, allocatable :: grid(:)       ! gvec grid
   integer, allocatable :: rgidx(:)      ! The index of -k
-  real(dp) int0, int1, ksi(8)           ! int0 : normal, int1: parity
+  real(dp) int0, ksi(8)                 ! int0 : normal, int1: parity
+  complex(dp) int1
   complex(dp), allocatable :: wfc(:)    ! Wave function (pseudo)
   complex(dp), allocatable :: swfc(:)   ! S|psi> useless here?
   !
@@ -53,7 +55,11 @@ PROGRAM z2inv
   call iotk_scan_end(iun, "RECIPROCAL_LATTICE_VECTORS")
   call iotk_scan_end(iun, "CELL")
   !
-  do ik=1, 8
+  call iotk_scan_begin(iun, "BRILLOUIN_ZONE")
+  call iotk_scan_dat(iun, "NUMBER_OF_K-POINTS", nkpt)
+  call iotk_scan_end(iun, "BRILLOUIN_ZONE")
+  !
+  do ik=1, nkpt
     !
     ! Initialize ksi
     !
@@ -91,7 +97,6 @@ PROGRAM z2inv
       rgidx(ii+1)=-1
       do jj=0, npw-1
         xx(:)=gvec(ii+1, :)+gvec(jj+1, :)
-        xx(:)=xx(:)-nint(xx(:))
         if (sum(xx(:)*xx(:))< 1E-5) then
           rgidx(ii+1)=jj+1
         endif
@@ -106,7 +111,7 @@ PROGRAM z2inv
     do ib=1, nb, 2
       !
       int0=0.0
-      int1=0.0
+      int1=cmplx(0.d0,0.d0)
       !
       ! For spinors, there are two components
       !
@@ -125,7 +130,7 @@ PROGRAM z2inv
         !
       enddo
       !
-      write(*,'(A, 1I4, A, 1F14.9)') "BAND ", (ib+1)/2, ": ", int1/int0
+      write(*,'(A, 1I4, A, 2F14.9)') "BAND ", (ib+1)/2, ": ", int1/int0
       !
       ! The actual index should only be calculated for 
       !   one of the Kramer pairs
@@ -142,7 +147,7 @@ PROGRAM z2inv
   enddo
   !
   write(*,*) "!!!!!!!! FINAL RESULTS !!!!!!!!"
-  do ik=1, 8
+  do ik=1, nkpt
     write(*,'(A, 1I2, A, 1F14.9)') "kpt: ", ik, " ksi: ", ksi(ik)
   enddo
   !
