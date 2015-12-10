@@ -78,7 +78,7 @@ PROGRAM z2inv
       !
       write(*,'(A, 1I4, A, 2F14.9)') "BAND ", (ib+1)/2, ": ", int1/int0
       !
-      if ((nb>0.and.ib<nb).or.(nb==0)) &
+      if ((nb>0.and.ib<nb).or.(nb==0.and.nint(occ(ib, ik)).eq.1)) &
         ksi(ik)=ksi(ik)*(int1/int0)
       !
     enddo !ib

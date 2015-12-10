@@ -3,7 +3,7 @@ MODULE constants
   implicit none
   !
   integer, parameter :: dp=selected_real_kind(14, 200)
-  real(dp), parameter :: c=0.262465831d0
+  real(dp), parameter :: cc=0.262465831d0
   real(dp), parameter :: twopi=3.141592653589793*2.d0
   real(dp), parameter :: sqrtpi=1.7724538509055158819194275566d0
   real(dp), parameter :: logpi_2=0.572364942924700087071713675675d0
