@@ -57,7 +57,8 @@ MODULE wvfunc
     nkpt=nint(tmp1)
     nbnd=nint(tmp2)
     !
-    allocate(npw(nkpt), occ(nbnd, nkpt), xk(3, nkpt))
+    allocate(npw(nkpt), xk(3, nkpt))
+    allocate(eig(nbnd, nkpt), occ(nbnd, nkpt))
     !
     call cross_prod(bvec(:, 1), alat(:, 2), alat(:, 3))
     call cross_prod(bvec(:, 2), alat(:, 3), alat(:, 1))
