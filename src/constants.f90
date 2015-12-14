@@ -13,6 +13,7 @@ MODULE constants
   integer, parameter :: stdout=6
   integer, parameter :: fin=10
   integer, parameter :: fout=11
+  real(dp), parameter :: eps3=1.0d-3
   real(dp), parameter :: eps4=1.0d-4
   real(dp), parameter :: eps5=1.0d-5
   real(dp), parameter :: eps6=1.0d-6

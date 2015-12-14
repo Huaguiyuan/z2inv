@@ -8,7 +8,7 @@ MODULE parity
   !
   SUBROUTINE invglist(ik)
     !
-    use constants,        ONLY : dp
+    use constants,        ONLY : dp, eps5
     use wvfunc,           ONLY : npw, gvec, grid
     !
     implicit none
@@ -29,7 +29,7 @@ MODULE parity
       igrev(ii)=-1
       do jj=1, npw(ik)
         xx(:)=gvec(:, ii, ik)+gvec(:, jj, ik)
-        if (sum(xx(:)*xx(:))< 1E-5) then
+        if (sum(xx(:)*xx(:))< eps5) then
           igrev(ii)=jj
         endif
       enddo

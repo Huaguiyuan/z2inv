@@ -137,7 +137,7 @@ END PROGRAM
 
 SUBROUTINE groupstates(grp, ngrp, ik)
   !
-  use constants,        ONLY : dp, eps6
+  use constants,        ONLY : dp, eps6, eps5, eps4, eps3
   use wvfunc,           ONLY : nbnd, eig
   !
   implicit none
@@ -154,7 +154,7 @@ SUBROUTINE groupstates(grp, ngrp, ik)
   !
   do ib=1, nbnd, 2
     !
-    if (abs(etmp-eig(ib,ik))>eps6) then
+    if (abs(etmp-eig(ib,ik))>eps4) then
       ii=ii+1
       grp(ii)=ib
       etmp=eig(ib, ik)
